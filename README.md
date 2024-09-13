@@ -77,7 +77,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build OrangeFox
-      uses: your-username/orangefox-builder-action@main
+      uses: mlm-games/orangefox-builder-action@main
       with:
         MANIFEST_BRANCH: '12.1'
         DEVICE_TREE: 'https://github.com/your-username/device_manufacturer_codename'
@@ -111,7 +111,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build OrangeFox
-      uses: your-username/orangefox-builder-action@main
+      uses: mlm-games/orangefox-builder-action@main
       with:
         MANIFEST_BRANCH: '12.1'
         DEVICE_TREE: 'https://github.com/your-username/device_manufacturer_codename'
@@ -141,7 +141,7 @@ In this example, `DEVICE_NAME` and `DEVICE_PATH` are omitted. The action will at
 
 ## Support
 
-If you encounter any issues, have questions, or need assistance, please open an issue in the [GitHub repository](https://github.com/your-username/orangefox-builder-action/issues).
+If you encounter any issues, have questions, or need assistance, please open an issue in the [GitHub repository](https://github.com/mlm-games/orangefox-builder-action/issues).
 
 ---
 
