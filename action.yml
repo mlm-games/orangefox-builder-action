@@ -12,7 +12,7 @@ inputs:
     - 11.0
   DEVICE_TREE:
     description: 'Custom Recovery Tree'
-    default: "https://github.com/${{ github.repository }}"
+    default: ''
     type: string
   DEVICE_TREE_BRANCH:
     description: 'Custom Recovery Tree Branch (use default branch if not specified)'
