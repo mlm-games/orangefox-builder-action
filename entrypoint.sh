@@ -34,9 +34,13 @@ cd sync
 
 # Clone device tree into a temporary directory
 echo "Cloning device tree..."
-cd "$MANIFEST_DIR/fox_$MANIFEST_BRANCH"
-git clone "$DEVICE_TREE" -b "$DEVICE_TREE_BRANCH" tmp_device_tree
-
+if [ -n "$DEVICE_TREE_BRANCH" ]; then
+    echo "Cloning device tree with branch: $DEVICE_TREE_BRANCH"
+    git clone "$DEVICE_TREE" -b "$DEVICE_TREE_BRANCH" tmp_device_tree
+else
+    echo "Cloning device tree without specifying a branch (default branch will be used)"
+    git clone "$DEVICE_TREE" tmp_device_tree
+fi
 # Check if DEVICE_NAME or DEVICE_PATH are default or not provided
 if [ -z "$DEVICE_NAME" ] || [ "$DEVICE_NAME" == "codename" ] || [ -z "$DEVICE_PATH" ] || [ "$DEVICE_PATH" == "device/company/codename" ]; then
     echo "Extracting variables from .mk files..."
