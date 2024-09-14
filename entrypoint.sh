@@ -32,9 +32,6 @@ git clone https://gitlab.com/OrangeFox/sync.git -b master
 cd sync
 ./orangefox_sync.sh --branch "$MANIFEST_BRANCH" --path "$MANIFEST_DIR/fox_$MANIFEST_BRANCH"
 
-# Save the tree in the fox dir.
-pushd "$MANIFEST_DIR/fox_$MANIFEST_BRANCH"
-
 # If DEVICE_TREE is not provided, default to the current repository
 if [ -z "$DEVICE_TREE" ]; then
     DEVICE_TREE="https://github.com/${GITHUB_REPOSITORY}"
@@ -42,20 +39,23 @@ if [ -z "$DEVICE_TREE" ]; then
     echo "DEVICE_TREE=${DEVICE_TREE}" >> $GITHUB_ENV
 fi
 
+# Define the path to tmp_device_tree
+TMP_DEVICE_TREE_PATH="$GITHUB_WORKSPACE/tmp_device_tree"
+
 # Clone device tree into a temporary directory
 echo "Cloning device tree..."
 if [ -n "$DEVICE_TREE_BRANCH" ]; then
     echo "Cloning device tree with branch: $DEVICE_TREE_BRANCH"
-    git clone "$DEVICE_TREE" -b "$DEVICE_TREE_BRANCH" tmp_device_tree
+    git clone "$DEVICE_TREE" -b "$DEVICE_TREE_BRANCH" $TMP_DEVICE_TREE_PATH
 else
     echo "Cloning device tree without specifying a branch (default branch will be used)"
-    git clone "$DEVICE_TREE" tmp_device_tree
+    git clone "$DEVICE_TREE" $TMP_DEVICE_TREE_PATH
 fi
 
 # Check if DEVICE_NAME or DEVICE_PATH are default or not provided
 if [ -z "$DEVICE_NAME" ] || [ "$DEVICE_NAME" == "codename" ] || [ -z "$DEVICE_PATH" ] || [ "$DEVICE_PATH" == "device/company/codename" ]; then
     echo "Extracting variables from .mk files..."
-    cd tmp_device_tree
+    cd $TMP_DEVICE_TREE_PATH
 
     # Initialize variables
     DEVICE_MAKEFILE=""
@@ -91,20 +91,20 @@ if [ -z "$DEVICE_NAME" ] || [ "$DEVICE_NAME" == "codename" ] || [ -z "$DEVICE_PA
         exit 1
     fi
 
-    # Navigate back to the fox dir
-    popd
+    # Navigate back to the root dir
+    cd "$MANIFEST_DIR/fox_$MANIFEST_BRANCH"
 
     # Move the device tree into the correct directory
     echo "Moving device tree to $DEVICE_PATH"
     mkdir -p "$DEVICE_PATH"
-    mv tmp_device_tree/* "$DEVICE_PATH/"
-    rm -rf tmp_device_tree
+    mv $TMP_DEVICE_TREE_PATH/* ""$ORANGEFOX_ROOT/$DEVICE_PATH/"
+    rm -rf $TMP_DEVICE_TREE_PATH
 else
     echo "Using provided DEVICE_NAME and DEVICE_PATH"
     # Move device tree to the specified DEVICE_PATH
-    mkdir -p "$DEVICE_PATH"
-    mv tmp_device_tree/* "$DEVICE_PATH/"
-    rm -rf tmp_device_tree
+    mkdir -p "$ORANGEFOX_ROOT/$DEVICE_PATH"
+    mv $TMP_DEVICE_TREE_PATH/* "$ORANGEFOX_ROOT/$DEVICE_PATH/"
+    rm -rf $TMP_DEVICE_TREE_PATH
 fi
 
 # Set ORANGEFOX_ROOT and OUTPUT_DIR now that DEVICE_NAME is known
