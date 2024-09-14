@@ -32,6 +32,9 @@ git clone https://gitlab.com/OrangeFox/sync.git -b master
 cd sync
 ./orangefox_sync.sh --branch "$MANIFEST_BRANCH" --path "$MANIFEST_DIR/fox_$MANIFEST_BRANCH"
 
+# Save the tree in the fox dir.
+pushd "$MANIFEST_DIR/fox_$MANIFEST_BRANCH"
+
 # If DEVICE_TREE is not provided, default to the current repository
 if [ -z "$DEVICE_TREE" ]; then
     DEVICE_TREE="https://github.com/${GITHUB_REPOSITORY}"
@@ -88,8 +91,8 @@ if [ -z "$DEVICE_NAME" ] || [ "$DEVICE_NAME" == "codename" ] || [ -z "$DEVICE_PA
         exit 1
     fi
 
-    # Navigate back to the root
-    cd "$MANIFEST_DIR/fox_$MANIFEST_BRANCH"
+    # Navigate back to the fox dir
+    popd
 
     # Move the device tree into the correct directory
     echo "Moving device tree to $DEVICE_PATH"
