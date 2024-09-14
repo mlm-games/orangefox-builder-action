@@ -96,14 +96,14 @@ if [ -z "$DEVICE_NAME" ] || [ "$DEVICE_NAME" == "codename" ] || [ -z "$DEVICE_PA
 
     # Move the device tree into the correct directory
     echo "Moving device tree to $DEVICE_PATH"
-    mkdir -p "$ORANGEFOX_ROOT/$DEVICE_PATH"
-    mv $TMP_DEVICE_TREE_PATH/* "$ORANGEFOX_ROOT/$DEVICE_PATH/"
+    mkdir -p "$DEVICE_PATH"
+    mv $TMP_DEVICE_TREE_PATH/* "$DEVICE_PATH/"
     rm -rf $TMP_DEVICE_TREE_PATH
 else
     echo "Using provided DEVICE_NAME and DEVICE_PATH"
     # Move device tree to the specified DEVICE_PATH
-    mkdir -p "$ORANGEFOX_ROOT/$DEVICE_PATH"
-    mv $TMP_DEVICE_TREE_PATH/* "$ORANGEFOX_ROOT/$DEVICE_PATH/"
+    mkdir -p "$$DEVICE_PATH"
+    mv $TMP_DEVICE_TREE_PATH/* "$$DEVICE_PATH/"
     rm -rf $TMP_DEVICE_TREE_PATH
 fi
 
